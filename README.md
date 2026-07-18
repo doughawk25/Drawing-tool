@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Drawing Canvas
 
-## Getting Started
+A full-screen, full-viewport drawing canvas built on [p5.js](https://p5js.org/). Brush, eraser, dot, line, rectangle, ellipse, and triangle tools, a token-based color palette, undo/redo, and a "save to gallery" flow that snapshots your drawing to `localStorage`.
 
-First, run the development server:
+**Live demo:** _add your deployed URL here_
+
+## Built with the Monad design system
+
+UI components (button, tooltip, toggle group, alert dialog, slider, sonner toaster) are installed from the public registry at `www.doughawk.design/r`, not vendored — pull any of them into your own project with the [shadcn CLI](https://ui.shadcn.com/docs/cli):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx shadcn add @monad/<name>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+for example:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx shadcn add @monad/button
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The registry is configured in [`components.json`](./components.json).
 
-## Learn More
+## Getting started
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm install
+pnpm dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open [http://localhost:3000](http://localhost:3000) — the canvas fills the entire viewport, with a floating toolbar in the top-left corner.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+- `pnpm dev` — start the dev server
+- `pnpm build` — production build
+- `pnpm start` — serve the production build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/                    # Next.js App Router entry (layout, page, providers, globals.css)
+  components/
+    drawing/              # DrawingCanvas + DrawingToolbar
+    ui/                   # Monad components installed via the shadcn registry
+  context/
+    drawing-context.tsx   # Shared drawing state — tools, history, undo/redo, save
+  hooks/
+    use-p5-drawing.ts     # p5.js sketch lifecycle + pointer handling
+    use-mobile.ts         # Monad viewport hook
+  lib/
+    gallery-storage.ts    # localStorage-backed save gallery
+    motion.ts             # Monad motion/transition tokens
+    tokens.ts             # Monad color ramp tokens
+    utils.ts              # cn() class helper
+```
+
+p5.js is loaded client-side only (`"use client"` + dynamic `import('p5')`, no SSR) since it depends on the DOM `canvas` API.
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
