@@ -247,8 +247,9 @@ export function DrawingToolbar() {
           />
         </Button>
 
-        {/* Trash — next to +/X */}
-        {canUndo && (
+        {/* Trash — next to +/X, only while the tool menu is open so it never
+            lingers as a stray button when the menu is collapsed */}
+        {menuOpen && canUndo && (
           <Button
             onClick={() => setTrashDialogOpen(true)}
             variant="destructive"
@@ -264,7 +265,7 @@ export function DrawingToolbar() {
             <motion.div
               key="tool-menu"
               {...slideFromLeft}
-              className="flex items-center gap-2 rounded-[16px] border border-border bg-background/90 backdrop-blur-md px-[--spacing(3)] py-[--spacing(1.5)] shadow-xs dark:bg-muted">
+              className="flex items-center gap-2 rounded-[16px] border border-border bg-background dark:bg-muted px-[--spacing(3)] py-[--spacing(1.5)] shadow-xs">
             {/* Color swatch — far left */}
             <div className="flex items-center gap-1.5">
               {/* Current color indicator + toggle */}
@@ -518,7 +519,7 @@ export function DrawingToolbar() {
             exit={{ opacity: 0, y: -4, transition: transitions.fast }}
             className="fixed inset-x-0 top-[4.5rem] z-[60] pointer-events-auto px-4"
           >
-            <div className="flex justify-between gap-1 rounded-[min(var(--radius-component-sm),12px)] border border-border bg-background/95 backdrop-blur-md px-1.5 py-1 shadow-lg dark:bg-muted">
+            <div className="flex justify-between gap-1 rounded-[min(var(--radius-component-sm),12px)] border border-border bg-background dark:bg-muted px-1.5 py-1 shadow-lg">
               {Array.from({ length: PALETTE_COLUMNS }, (_, colIdx) => (
                 <div key={colIdx} className="flex flex-1 flex-col gap-1">
                   {[TOKEN_PALETTE[colIdx], TOKEN_PALETTE[colIdx + PALETTE_COLUMNS]].map((entry) => {
